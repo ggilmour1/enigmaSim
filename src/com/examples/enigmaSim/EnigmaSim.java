@@ -1,5 +1,7 @@
 package com.examples.enigmaSim;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class EnigmaSim {
@@ -43,11 +45,13 @@ public class EnigmaSim {
 */
 
     public static String plugBoardIn(String chr) {
-        return getRot1CharIn(chr);
+        String in = plugBoard(chr);
+        return getRot1CharIn(in);
     }
 
     public static String plugBoardOut(String chr) {
-        return chr;
+        String out = plugBoard(chr);
+        return out;
     }
 
     public static String getRot1CharIn(String chr) {
@@ -78,13 +82,37 @@ public class EnigmaSim {
 
         String[] ukwa = {"E", "J", "M", "Z", "A", "L", "Y", "X", "V", "B", "W", "F", "C", "R", "Q", "U", "O", "N", "T", "S", "P", "I", "K", "H", "G", "D"};
         char x = chr.toUpperCase().charAt(0);
-        int y = (int) x;
-        System.out.println("The letter " + chr + "has index at " + y);
-        String e = ukwa[y - 65];
+        int y = (int) (x);
+        String e = ukwa[(y - 65)];
 
         return getRot3CharOut(e);
     }
 
+    public static String plugBoard(String chr) {
+        Map<String, String> plugs = new HashMap<>();
+        plugs.put("A", "N");
+        plugs.put("C", "K");
+        plugs.put("E", "B");
+        plugs.put("H", "N");
+        plugs.put("V", "R");
 
+        boolean resultKey = plugs.containsKey(chr);
+        boolean resultVal = plugs.containsValue(chr);
+        if (resultKey) {
+            System.out.println(plugs.get(chr));
+            chr = plugs.get(chr);
+            //System.out.println("Key: After plugboard input char is now " + chr);
+        } else if (resultVal) {
+
+            for (Map.Entry<String, String> entry : plugs.entrySet()) {
+                if (entry.getValue().equals(chr)) {
+                    chr = entry.getKey();
+                    System.out.println("Test " + entry.getKey());
+                }
+            }
+            //System.out.println("Value: After plugboard input char is now " + chr);
+        }
+        return chr;
+    }
 
 }
