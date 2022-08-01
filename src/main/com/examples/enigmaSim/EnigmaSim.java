@@ -14,7 +14,7 @@ public class EnigmaSim {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter clear character to be encoded");
         String clrChr = scan.nextLine();
-        String encChar = plugBoardIn(clrChr);
+        String encChar = inToPlugboard(clrChr);
         return encChar;
 
     }
@@ -44,48 +44,55 @@ public class EnigmaSim {
     }
 */
 
-    public static String plugBoardIn(String chr) {
+    public static String inToPlugboard(String chr) {
         String in = plugBoard(chr);
-        return getRot1CharIn(in);
+        return in;
     }
 
-    public static String plugBoardOut(String chr) {
+    public static String outToPlugboard(String chr) {
         String out = plugBoard(chr);
         return out;
     }
 
-    public static String getRot1CharIn(String chr) {
-        return getRot2CharIn(chr);
+    public static String inToRotor1(String chr) {
+        String[] rotor1 = {"L","P","G","S","Z","M","H","A","E","O","Q","K","V","X","R","F","Y","B","U","T","N","I","C","J","D","W"};
+        Integer indexChar = getIndex(chr);
+        String rotChar = rotor1[(indexChar)];
+        return rotChar;
     }
 
-    public static String getRot1CharOut(String chr) {
-        return plugBoardOut(chr);
+    public static String outFromRotor1(String chr) {
+        String[] rotor1 = {"L","P","G","S","Z","M","H","A","E","O","Q","K","V","X","R","F","Y","B","U","T","N","I","C","J","D","W"};
+        Integer indexChar = getIndex(chr);
+        String rotChar = rotor1[(indexChar)];
+
+        System.out.println("Received " + chr + " from reflector. " + chr + " has ASCII " + indexChar + " and maps to " + rotChar);
+        return rotChar;
     }
 
-    public static String getRot2CharIn(String chr) {
-        return getRot3CharIn(chr);
+    public static String inToRotor2(String chr) {
+        return inToRotor3(chr);
     }
 
-    public static String getRot2CharOut(String chr) {
-        return getRot1CharOut(chr);
+    public static String outFromRotor2(String chr) {
+        return outFromRotor1(chr);
     }
 
-    public static String getRot3CharIn(String chr) {
+    public static String inToRotor3(String chr) {
         return getReflectedChar(chr);
     }
 
-    public static String getRot3CharOut(String chr) {
-        return getRot2CharOut(chr);
+    public static String outFromRotor3(String chr) {
+        return outFromRotor2(chr);
     }
 
     public static String getReflectedChar(String chr) {
 
         String[] ukwa = {"E", "J", "M", "Z", "A", "L", "Y", "X", "V", "B", "W", "F", "C", "R", "Q", "U", "O", "N", "T", "S", "P", "I", "K", "H", "G", "D"};
-        char x = chr.toUpperCase().charAt(0);
-        int y = (int) (x);
-        String e = ukwa[(y - 65)];
+        Integer indexChar = getIndex(chr);
 
-        return getRot3CharOut(e);
+        String refChar = ukwa[(indexChar)];
+        return refChar;
     }
 
     public static String plugBoard(String chr) {
@@ -99,20 +106,23 @@ public class EnigmaSim {
         boolean resultKey = plugs.containsKey(chr);
         boolean resultVal = plugs.containsValue(chr);
         if (resultKey) {
-            System.out.println(plugs.get(chr));
             chr = plugs.get(chr);
-            //System.out.println("Key: After plugboard input char is now " + chr);
         } else if (resultVal) {
 
             for (Map.Entry<String, String> entry : plugs.entrySet()) {
                 if (entry.getValue().equals(chr)) {
                     chr = entry.getKey();
-                    System.out.println("Test " + entry.getKey());
                 }
             }
-            //System.out.println("Value: After plugboard input char is now " + chr);
         }
         return chr;
+    }
+
+    public static Integer getIndex(String chr) {
+        char x = chr.toUpperCase().charAt(0);
+        int y = (int) (x);
+
+        return (y-65);
     }
 
 }
